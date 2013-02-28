@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package>
+  <metadata>
+    <id>DotNetOpenAuth.GoogleOAuth2</id>
+    <version>$version$</version>
+    <title>DotNetOpenAuth OAuth2 Client for Google</title>
+    <authors>$author$</authors>
+    <description>$description$</description>
+    <language>en-US</language>
+    <licenseUrl>https://raw.github.com/mj1856/DotNetOpenAuth.GoogleOAuth2/master/LICENSE.txt</licenseUrl>
+    <projectUrl>https://github.com/mj1856/DotNetOpenAuth.GoogleOAuth2</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <tags>dotnetopenauth google oauth2 oauth aspnet asp.net oauthwebsecurity login security authentication</tags>
+    <dependencies>
+      <dependency id="DotNetOpenAuth.AspNet" version="4.2.2.13055" />
+      <dependency id="Newtonsoft.Json" version="4.5.6" />
+    </dependencies>
+    <iconUrl>https://github.com/AArnott/dotnetopenid/raw/v3.4/doc/logo/dnoa-logo_32x32.png</iconUrl>
+  </metadata>
+</package>
