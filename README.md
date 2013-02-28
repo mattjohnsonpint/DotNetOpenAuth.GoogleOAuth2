@@ -10,10 +10,6 @@ DotNetOpenAuth OAuth2 Client for Google
 
  3. Register the client instead of the existing Google OpenId client.
 
-    <s>
-        OAuthWebSecurity.RegisterGoogleClient();
-    </s>
-
         var client = new GoogleOAuth2Client("yourClientId", "yourClientSecret");
         var extraData = new Dictionary<string, object>();
         OAuthWebSecurity.RegisterClient(client, "Google", extraData);
