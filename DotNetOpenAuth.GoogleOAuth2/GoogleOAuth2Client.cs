@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
-using DotNetOpenAuth.AspNet;
 using DotNetOpenAuth.AspNet.Clients;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -162,31 +161,6 @@ namespace DotNetOpenAuth.GoogleOAuth2
                     return accessToken;
                 }
             }
-        }
-
-        public override AuthenticationResult VerifyAuthentication(HttpContextBase context, Uri returnPageUrl)
-        {
-            var code = context.Request.QueryString["code"];
-            if (string.IsNullOrEmpty(code))
-                return AuthenticationResult.Failed;
-
-            var accessToken = QueryAccessToken(returnPageUrl, code);
-            if (accessToken == null)
-                return AuthenticationResult.Failed;
-
-            var userData = GetUserData(accessToken);
-            if (userData == null)
-                return AuthenticationResult.Failed;
-
-            // add the access token to the user data dictionary just in case page developers want to use it
-            userData.Add("accesstoken", accessToken);
-
-            return new AuthenticationResult(
-                isSuccessful: true,
-                provider: ProviderName,
-                providerUserId: userData["id"],
-                userName: userData["name"],
-                extraData: userData);
         }
 
         private static Uri BuildUri(string baseUri, NameValueCollection queryParameters)
