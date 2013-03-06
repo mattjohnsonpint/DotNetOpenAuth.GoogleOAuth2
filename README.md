@@ -1,6 +1,9 @@
 DotNetOpenAuth OAuth2 Client for Google
 ======================================
 
+DNOA and OAuthWebSecurity currently ship with only an OpenId provider for Google.
+This is an OAuth2 client that you can use instead.
+
 ## Setup
 
  1. Setup your Google App using the [Google APIs console](https://code.google.com/apis/console).
