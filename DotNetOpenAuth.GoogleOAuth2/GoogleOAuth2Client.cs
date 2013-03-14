@@ -85,9 +85,6 @@ namespace DotNetOpenAuth.GoogleOAuth2
             if (requestedScopes.Length == 0)
                 throw new ArgumentException("One or more scopes must be requested.", "requestedScopes");
 
-            if (requestedScopes.Any(x => x.StartsWith("http:", StringComparison.OrdinalIgnoreCase)))
-                throw new ArgumentException("Specify scopes without the base uri (" + ScopeBaseUri + ")");
-
             _clientId = clientId;
             _clientSecret = clientSecret;
             _requestedScopes = requestedScopes;
@@ -95,11 +92,13 @@ namespace DotNetOpenAuth.GoogleOAuth2
 
         protected override Uri GetServiceLoginUrl(Uri returnUrl)
         {
+            var scopes = _requestedScopes.Select(x => !x.StartsWith("http", StringComparison.OrdinalIgnoreCase) ? ScopeBaseUri + x : x);
+
             return BuildUri(AuthorizationEndpoint, new NameValueCollection
                 {
                     { "response_type", "code" },
                     { "client_id", _clientId },
-                    { "scope", string.Join(" ", _requestedScopes.Select(x => ScopeBaseUri + x)) },
+                    { "scope", string.Join(" ", scopes) },
                     { "redirect_uri", returnUrl.GetLeftPart(UriPartial.Path) },
                     { "state", returnUrl.Query.Substring(1) },
                 });
