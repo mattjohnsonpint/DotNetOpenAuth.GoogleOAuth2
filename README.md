@@ -4,6 +4,8 @@ DotNetOpenAuth OAuth2 Client for Google
 DNOA and OAuthWebSecurity currently ship with only an OpenId provider for Google.
 This is an OAuth2 client that you can use instead.
 
+Google Reference: https://developers.google.com/accounts/docs/OAuth2
+
 ## Setup
 
  1. Setup your Google App using the [Google APIs console](https://code.google.com/apis/console).
@@ -31,7 +33,8 @@ This is needed because Google requires that any extra querystring parameters for
 redirect be packed into a single parameter called `state`.  Since `OAuthWebSecurity` needs
 two parameters, `__provider__` and `__sid__` - we have to rewrite the url.
 
-Reference: https://developers.google.com/accounts/docs/OAuth2
+**Note:** The `RewriteRequest` method will unpack the `state` parameter and place its contents back into the regular querystring.
+So if you are looking for a state value such as `ReturnUrl`, you will find it has been moved to `Request.QueryString["ReturnUrl"]`.
 
 
 ## Disclaimer
