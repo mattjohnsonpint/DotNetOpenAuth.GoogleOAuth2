@@ -93,6 +93,7 @@ namespace DotNetOpenAuth.GoogleOAuth2
         protected override Uri GetServiceLoginUrl(Uri returnUrl)
         {
             var scopes = _requestedScopes.Select(x => !x.StartsWith("http", StringComparison.OrdinalIgnoreCase) ? ScopeBaseUri + x : x);
+            var state = string.IsNullOrEmpty(returnUrl.Query) ? string.Empty : returnUrl.Query.Substring(1);
 
             return BuildUri(AuthorizationEndpoint, new NameValueCollection
                 {
@@ -100,7 +101,7 @@ namespace DotNetOpenAuth.GoogleOAuth2
                     { "client_id", _clientId },
                     { "scope", string.Join(" ", scopes) },
                     { "redirect_uri", returnUrl.GetLeftPart(UriPartial.Path) },
-                    { "state", returnUrl.Query.Substring(1) },
+                    { "state", state },
                 });
         }
 
