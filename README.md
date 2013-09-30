@@ -21,11 +21,11 @@ Google Reference: https://developers.google.com/accounts/docs/OAuth2
 
  3. Register the client instead of the existing Google OpenId client.
 
-```csharp
-var client = new GoogleOAuth2Client("yourClientId", "yourClientSecret");
-var extraData = new Dictionary<string, object>();
-OAuthWebSecurity.RegisterClient(client, "Google", extraData);
-```
+ ```csharp
+ var client = new GoogleOAuth2Client("yourClientId", "yourClientSecret");
+ var extraData = new Dictionary<string, object>();
+ OAuthWebSecurity.RegisterClient(client, "Google", extraData);
+ ```
 
 ## Usage
 
