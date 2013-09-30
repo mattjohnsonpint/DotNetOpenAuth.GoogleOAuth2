@@ -11,7 +11,13 @@ Google Reference: https://developers.google.com/accounts/docs/OAuth2
  1. Setup your Google App using the [Google APIs console](https://code.google.com/apis/console).
     Detailed instructions [here](http://ben.onfabrik.com/posts/oauth-providers#google)
 
- 2. Install this library from [NuGet](https://nuget.org/packages/DotNetOpenAuth.GoogleOAuth2), or compile from source and reference.
+ 2. Install this library from [NuGet](https://nuget.org/packages/DotNetOpenAuth.GoogleOAuth2),
+
+        PM> Install-Package DotNetOpenAuth.GoogleOAuth2
+ 
+ ... or download from the [releases page](https://github.com/mj1856/DotNetOpenAuth.GoogleOAuth2/releases) and add a reference
+ 
+ ... or compile from source and add a reference
 
  3. Register the client instead of the existing Google OpenId client.
 
