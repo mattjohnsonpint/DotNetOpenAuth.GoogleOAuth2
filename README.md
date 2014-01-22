@@ -1,7 +1,7 @@
 DotNetOpenAuth OAuth2 Client for Google
 ======================================
 
-DNOA and OAuthWebSecurity currently ship with only an OpenId provider for Google.
+DNOA and OAuthWebSecurity for MVC4 (VS2012) ship with only an OpenId provider for Google.
 This is an OAuth2 client that you can use instead.
 
 Google Reference: https://developers.google.com/accounts/docs/OAuth2
