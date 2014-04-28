@@ -7,7 +7,6 @@ This is an OAuth2 client that you can use instead.
 **IMPORTANT** - If you are using ASP.Net MVC 5, this package is not applicable.  You should use [Microsoft.Owin.Security.Google](https://www.nuget.org/packages/Microsoft.Owin.Security.Google) instead.  (It also ships with the MVC 5 starter templates in VS 2013.)  See also [the tutorial here](http://www.asp.net/mvc/tutorials/mvc-5/create-an-aspnet-mvc-5-app-with-facebook-and-google-oauth2-and-openid-sign-on).
 
 
-Google Reference: https://developers.google.com/accounts/docs/OAuth2
 
 ## Setup
 
