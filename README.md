@@ -1,8 +1,11 @@
 DotNetOpenAuth OAuth2 Client for Google
 ======================================
 
-DNOA and OAuthWebSecurity for MVC4 (VS2012) ship with only an OpenId provider for Google.
+DNOA and OAuthWebSecurity for ASP.Net MVC 4 ship with only an OpenId provider for Google.
 This is an OAuth2 client that you can use instead.
+
+**IMPORTANT** - If you are using ASP.Net MVC 5, this package is not applicable.  You should use [Microsoft.Owin.Security.Google](https://www.nuget.org/packages/Microsoft.Owin.Security.Google) instead.  (It also ships with the MVC 5 starter templates in VS 2013.)  See also [the tutorial here](http://www.asp.net/mvc/tutorials/mvc-5/create-an-aspnet-mvc-5-app-with-facebook-and-google-oauth2-and-openid-sign-on).
+
 
 Google Reference: https://developers.google.com/accounts/docs/OAuth2
 
@@ -49,4 +52,4 @@ So if you are looking for a state value such as `ReturnUrl`, you will find it ha
 
 ## Disclaimer
 
-I don't work for Google, Microsoft, or DNOA.  This is released under the [MIT](LICENCE.txt) licence.  Do what you want with it.
+This is released under the [MIT](LICENCE.txt) licence.  Do what you want with it.
