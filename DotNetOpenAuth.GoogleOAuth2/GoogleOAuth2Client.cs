@@ -165,9 +165,10 @@ namespace DotNetOpenAuth.GoogleOAuth2
 
         private static Uri BuildUri(string baseUri, NameValueCollection queryParameters)
         {
-            var q = HttpUtility.ParseQueryString(string.Empty);
-            q.Add(queryParameters);
-            var builder = new UriBuilder(baseUri) { Query = q.ToString() };
+            var keyValuePairs = queryParameters.AllKeys.Select(k => HttpUtility.UrlEncode(k) + "=" + HttpUtility.UrlEncode(queryParameters[k]));
+            var qs = String.Join("&", keyValuePairs);
+
+            var builder = new UriBuilder(baseUri) { Query = qs };
             return builder.Uri;
         }
 
