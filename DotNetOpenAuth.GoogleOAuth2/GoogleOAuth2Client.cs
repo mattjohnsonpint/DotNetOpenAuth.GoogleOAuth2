@@ -35,11 +35,6 @@ namespace DotNetOpenAuth.GoogleOAuth2
         private const string UserInfoEndpoint = "https://www.googleapis.com/oauth2/v1/userinfo";
 
         /// <summary>
-        /// The base uri for scopes.
-        /// </summary>
-        private const string ScopeBaseUri = "https://www.googleapis.com/auth/";
-
-        /// <summary>
         /// The _app id.
         /// </summary>
         private readonly string _clientId;
@@ -62,7 +57,7 @@ namespace DotNetOpenAuth.GoogleOAuth2
         /// <param name="clientId">The Google Client Id</param>
         /// <param name="clientSecret">The Google Client Secret</param>
         public GoogleOAuth2Client(string clientId, string clientSecret)
-            : this(clientId, clientSecret, new[] { "userinfo.profile", "userinfo.email" }) { }
+            : this(clientId, clientSecret, new[] { "profile", "email" }) { }
 
         /// <summary>
         /// Creates a new Google OAuth2 client.
@@ -92,7 +87,7 @@ namespace DotNetOpenAuth.GoogleOAuth2
 
         protected override Uri GetServiceLoginUrl(Uri returnUrl)
         {
-            var scopes = _requestedScopes.Select(x => !x.StartsWith("http", StringComparison.OrdinalIgnoreCase) ? ScopeBaseUri + x : x);
+            var scopes = _requestedScopes;
             var state = string.IsNullOrEmpty(returnUrl.Query) ? string.Empty : returnUrl.Query.Substring(1);
 
             return BuildUri(AuthorizationEndpoint, new NameValueCollection
