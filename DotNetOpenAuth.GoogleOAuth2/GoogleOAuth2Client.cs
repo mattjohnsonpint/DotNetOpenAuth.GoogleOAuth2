@@ -30,6 +30,11 @@ namespace DotNetOpenAuth.GoogleOAuth2
         private const string TokenEndpoint = "https://accounts.google.com/o/oauth2/token";
 
         /// <summary>
+        /// The token info endpoint.
+        /// </summary>
+        private const string TOKEN_INFO_ENDPOINT = "https://www.googleapis.com/oauth2/v1/tokeninfo";
+
+        /// <summary>
         /// The user info endpoint.
         /// </summary>
         private const string UserInfoEndpoint = "https://www.googleapis.com/oauth2/v1/userinfo";
@@ -102,9 +107,10 @@ namespace DotNetOpenAuth.GoogleOAuth2
 
         protected override IDictionary<string, string> GetUserData(string accessToken)
         {
-            var uri = BuildUri(UserInfoEndpoint, new NameValueCollection { { "access_token", accessToken } });
+            var uri = BuildUri(UserInfoEndpoint);
 
             var webRequest = (HttpWebRequest) WebRequest.Create(uri);
+            webRequest.Headers.Add(HttpRequestHeader.Authorization, "Bearer " + accessToken);
 
             using (var webResponse = webRequest.GetResponse())
             using (var stream = webResponse.GetResponseStream())
@@ -158,12 +164,23 @@ namespace DotNetOpenAuth.GoogleOAuth2
             }
         }
 
-        private static Uri BuildUri(string baseUri, NameValueCollection queryParameters)
+        private Uri BuildUri(string baseUri, NameValueCollection queryParameters = null)
         {
-            var keyValuePairs = queryParameters.AllKeys.Select(k => HttpUtility.UrlEncode(k) + "=" + HttpUtility.UrlEncode(queryParameters[k]));
-            var qs = String.Join("&", keyValuePairs);
+            UriBuilder builder;
 
-            var builder = new UriBuilder(baseUri) { Query = qs };
+            //baseUri = string.Format(baseUri, string.IsNullOrWhiteSpace(_apiVersion) ? string.Empty : _apiVersion + "/");
+
+            if (queryParameters != null)
+            {
+                var keyValuePairs = queryParameters.AllKeys.Select(k => HttpUtility.UrlEncode(k) + "=" + HttpUtility.UrlEncode(queryParameters[k]));
+                var qs = String.Join("&", keyValuePairs);
+
+                builder = new UriBuilder(baseUri) { Query = qs };
+            }
+            else
+            {
+                builder = new UriBuilder(baseUri);
+            }
             return builder.Uri;
         }
 
@@ -184,6 +201,88 @@ namespace DotNetOpenAuth.GoogleOAuth2
             q.Remove("state");
 
             ctx.RewritePath(ctx.Request.Path + "?" + q);
+        }
+
+        /// <summary>
+        /// Verifies whether provided access token is really issued for specified application.
+        /// </summary>
+        /// <param name="accessToken">Access token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.Exception">Throws exception when dynamic data object does not contain app_id or is_valid attributes.</exception>
+        public bool VerifyAccessToken(string accessToken)
+        {
+            bool ret = false;
+
+            var uri = BuildUri(TOKEN_INFO_ENDPOINT, new NameValueCollection
+                {
+                    { "access_token", accessToken },
+                });
+
+            var webRequest = (HttpWebRequest)WebRequest.Create(uri);
+
+            try
+            {
+                using (var webResponse = (HttpWebResponse)webRequest.GetResponse())
+                {
+                    var responseStream = webResponse.GetResponseStream();
+                    if (responseStream != null)
+                    {
+                        using (var reader = new StreamReader(responseStream))
+                        {
+                            var json = reader.ReadToEnd();
+                            dynamic responseData = JsonConvert.DeserializeObject<dynamic>(json);
+
+                            try
+                            {
+                                if (responseData.audience == _clientId)
+                                {
+                                    ret = true;
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                throw new Exception("Cannot verify access token. See inner exception.", ex);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Cannot verify access token. See inner exception.", ex);
+            }
+
+            return ret;
+        }
+
+        /// <summary>
+        /// Verifies whether provided access token was really issued for specified application and checks it againts provided e-mail.
+        /// </summary>
+        /// <param name="accessToken"></param>
+        /// <param name="email"></param>
+        /// <returns></returns>
+        /// <exception cref="System.Exception">Throws exception when dynamic data object does not contain app_id or is_valid attributes OR when downloaded user data does not contain email.</exception>
+        public bool VerifyAccessToken(string accessToken, string email)
+        {
+            bool ret = false;
+
+            try
+            {
+                if (VerifyAccessToken(accessToken))
+                {
+                    IDictionary<string, string> data = GetUserData(accessToken);
+                    if (data != null)
+                    {
+                        ret = (data["email"] == email);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Cannot verify access token and e-mail. See inner exception.", ex);
+            }
+
+            return ret;
         }
     }
 }
