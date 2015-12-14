@@ -157,7 +157,7 @@ namespace DotNetOpenAuth.GoogleOAuth2
                     break;
                 string key = mainBlock.Substring(quoteLoc1 + 1, quoteLoc2 - quoteLoc1 - 1);
                 mainBlock = mainBlock.Substring(quoteLoc2 + 1);
-                mainBlock = mainBlock.TrimStart(" :".ToCharArray());
+                mainBlock = mainBlock.TrimStart(" :\r\n\t".ToCharArray());
                 if (mainBlock.StartsWith("\""))// Has quotation marks on value;
                 {
                     quoteLoc1 = mainBlock.IndexOf('\"', 0);
@@ -174,10 +174,10 @@ namespace DotNetOpenAuth.GoogleOAuth2
                 {
                     int commaLoc = mainBlock.IndexOf(',', 0);
                     if (commaLoc == -1)
-                        break;
-                    string value = mainBlock.Substring(0, commaLoc).Trim(" ".ToCharArray());
+                        commaLoc = mainBlock.Length;
+                    string value = mainBlock.Substring(0, commaLoc).Trim(" \r\n\t".ToCharArray());
                     dictionary.Add(key, value);
-                    mainBlock = mainBlock.Substring(commaLoc + 1);
+                    mainBlock = mainBlock.Substring(commaLoc);
                 }
             }
             return dictionary;
