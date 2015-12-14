@@ -120,10 +120,67 @@ namespace DotNetOpenAuth.GoogleOAuth2
                 using (var textReader = new StreamReader(stream))
                 {
                     var json = textReader.ReadToEnd();
-                    var extraData = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
+                    var extraData = new Dictionary<string, string>();
+                    try
+                    {
+                        extraData = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
+                    }
+                    catch (Exception ex)
+                    {
+                        // Perhaps the ReflectionPermission has not been enabled on the Web app;
+                        // Try using an alternative method of parsing to convert the JSON into
+                        // a Dictionary<string, string>:
+                        extraData = JsonToDictionary(json);
+                    }
                     return extraData;
                 }
             }
+        }
+
+        protected Dictionary<string, string> JsonToDictionary(string json)
+        {
+            Dictionary<string, string> dictionary = new Dictionary<string, string>();
+            int braceLoc1 = json.IndexOf("{", 0);
+            if (braceLoc1 == -1)
+                return dictionary;
+            int braceLoc2 = json.IndexOf("}", braceLoc1);
+            if (braceLoc2 == -1)
+                return dictionary;
+            string mainBlock = json.Substring(braceLoc1 + 1, braceLoc2 - braceLoc1 - 1);
+            while (mainBlock.Length > 0)
+            {
+                int quoteLoc1 = mainBlock.IndexOf('\"', 0);
+                if (quoteLoc1 == -1)
+                    break;
+                int quoteLoc2 = mainBlock.IndexOf('\"', quoteLoc1 + 1);
+                if (quoteLoc2 == -1)
+                    break;
+                string key = mainBlock.Substring(quoteLoc1 + 1, quoteLoc2 - quoteLoc1 - 1);
+                mainBlock = mainBlock.Substring(quoteLoc2 + 1);
+                mainBlock = mainBlock.TrimStart(" :\r\n\t".ToCharArray());
+                if (mainBlock.StartsWith("\""))// Has quotation marks on value;
+                {
+                    quoteLoc1 = mainBlock.IndexOf('\"', 0);
+                    if (quoteLoc1 == -1)
+                        break;
+                    quoteLoc2 = mainBlock.IndexOf('\"', quoteLoc1 + 1);
+                    if (quoteLoc2 == -1)
+                        break;
+                    string value = mainBlock.Substring(quoteLoc1 + 1, quoteLoc2 - quoteLoc1 - 1);
+                    dictionary.Add(key, value);
+                    mainBlock = mainBlock.Substring(quoteLoc2 + 1);
+                }
+                else// Has bare value (no quotation marks);
+                {
+                    int commaLoc = mainBlock.IndexOf(',', 0);
+                    if (commaLoc == -1)
+                        commaLoc = mainBlock.Length;
+                    string value = mainBlock.Substring(0, commaLoc).Trim(" \r\n\t".ToCharArray());
+                    dictionary.Add(key, value);
+                    mainBlock = mainBlock.Substring(commaLoc);
+                }
+            }
+            return dictionary;
         }
 
         protected override string QueryAccessToken(Uri returnUrl, string authorizationCode)
