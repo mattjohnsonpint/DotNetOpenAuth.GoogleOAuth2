@@ -1,0 +1,3 @@
+This project has been retired.  If you still need it, the code is still available on the `master` branch.
+
+Please update to a newer version of ASP.Net MVC.  If you are using ASP.Net MVC 5, you should use [Microsoft.Owin.Security.Google](https://www.nuget.org/packages/Microsoft.Owin.Security.Google) instead.  (It also ships with the MVC 5 starter templates in Visual Studio.)  See also [the tutorial here](http://www.asp.net/mvc/tutorials/mvc-5/create-an-aspnet-mvc-5-app-with-facebook-and-google-oauth2-and-openid-sign-on).
