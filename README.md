@@ -1,4 +1,4 @@
-DotNetOpenAuth OAuth2 Client for Google
+DotNetOpenAuth OAuth2 Client for Google  [![NuGet Version](https://img.shields.io/nuget/v/DotNetOpenAuth.GoogleOAuth2.svg?style=flat)](https://www.nuget.org/packages/DotNetOpenAuth.GoogleOAuth2/) 
 ======================================
 
 DNOA and OAuthWebSecurity for ASP.Net MVC 4 ship with only an OpenId provider for Google.
